@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+   <PropertyGroup>
+      <AssemblyName>Servers</AssemblyName>
+      <OutputPath>bin\</OutputPath>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <MySourceFiles Include="..\MSBuild\Customer*\C*F1\Server\*.*" />
+   </ItemGroup>
+
+   <Target Name="CopyFiles" BeforeTargets="Build">
+      <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="..\MSBuild\Server\" />
+   </Target>
+
+   <ItemGroup>
+      <Compile Include="Server/*.*" />
+   </ItemGroup>
+
+   <Target Name="Build" Inputs="@(Compile)" Outputs="$(OutputPath)$(AssemblyName).exe">
+      <MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" />
+      <Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" />
+   </Target>
+
+   <Target Name="Clean">
+      <Delete Files="$(OutputPath)$(AssemblyName).exe" />
+   </Target>
+
+   <Target Name="Rebuild" DependsOnTargets="Clean;Build" />
+
+</Project>
+
